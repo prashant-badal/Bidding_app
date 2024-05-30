@@ -1,37 +1,93 @@
-
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
-// desc- Get user profile
-// route -GET /api/user/profile
-// @access - public
+const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
 
-const getUserProfile=(req,res)=>{
-    res.status(200).send("Welcome to User Profile")
-}
+// desc - Get user profile
+// route - GET /api/user/profile
+// access - public
+const getUserProfile = (req, res) => {
+    res.status(200).send("Welcome to User Profile");
+};
 
+// desc - Register user
+// route - POST /api/user/register
+// access - public
+const registerUser = asyncHandler(async (req, res) => {
+    const { username, password, role, email } = req.body;
 
-// desc-register user
-// route -POST /api/user/register
-// @access - public
-const registerUser=(asyncHandler(async(req,res)=>{
-    const {username,password,role,email}=req.body;
-    console.log( username);
-    
-    if(!username||!password || !role ||!email){
-        res.status(400)
-        throw new Error("All field are Mandatory")
+    // Validate input fields
+    if (!username || !password || !role || !email) {
+        res.status(400);
+        throw new Error("All fields are mandatory");
     }
 
+    // Check if the user with the provided email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        res.status(400);
+        throw new Error("Email already exists");
+    }
+    console.log("okay1");
 
+    const hashPassword= await bcrypt.hash(password, 10);
+    console.log(hashPassword)
+
+    // Create a new user
     const user = await User.create({
         username,
         email,
-        password,
+        password :hashPassword,
         role
-    })
-    console.log(`user created ${user}`) 
+    });
 
+    console.log("User created successfully");
+
+    // Send a success response
+    res.status(201).json({
+        _id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt,
+    });
+});
+
+
+
+// desc- POST login user
+// route - POST /api/user/login
+// access - public
+
+const loginUser= (asyncHandler(async(req,res)=>{
+    const { password, email } = req.body;
+
+    // Validate input fields
+    if ( !password ||  !email) {
+        res.status(400);
+        throw new Error("All fields are mandatory");
+    }
+
+    const user=await User.findOne({email});
+
+    if(user &&  (await bcrypt.compare(password, user.password))){
+        console.log("ok match")
+
+        const accessToken = jwt.sign({
+            user: {
+                username: user.username,
+                email: user.email,
+                id: user.id
+            }
+        }, process.env.ACCESS_TOKEN_SECRETE, { expiresIn: "5min" });
+        res.status(200).json({ accessToken });
+    }
+    else {
+        res.status(401);
+        console.log("noy okay")
+        throw new Error("Email or password is not valid");
+    }
 
 }))
 
-module.exports={getUserProfile,registerUser}
+module.exports = { getUserProfile, registerUser,loginUser };

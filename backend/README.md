@@ -13,3 +13,7 @@
 <!-- set up Mongoose :well design  object model schema for our enitity -->
 
 <!-- install express-aysnc-handler :to handle async function because when we deal with  mongoose ,it return promise . -->
+
+<!-- bcrypt libray: for hash the password  -->
+
+<!-- install jsonwebtoken : for  standardized way to securely send data between two parties  .token is encoded in json format -->
