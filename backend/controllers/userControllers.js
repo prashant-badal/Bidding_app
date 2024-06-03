@@ -3,12 +3,8 @@ const User = require('../models/userModel');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
-// desc - Get user profile
-// route - GET /api/user/profile
-// access - public
-const getUserProfile = (req, res) => {
-    res.status(200).send("Welcome to User Profile");
-};
+
+
 
 // desc - Register user
 // route - POST /api/user/register
@@ -89,5 +85,16 @@ const loginUser= (asyncHandler(async(req,res)=>{
     }
 
 }))
+
+// desc- Get main Profile page
+// route :api/user/profile
+// access - private
+
+const getUserProfile=asyncHandler(async(req,res)=>{
+    res.status(200);
+    res.json({message:"Welcome to Profile"})
+})
+
+
 
 module.exports = { getUserProfile, registerUser,loginUser };
