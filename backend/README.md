@@ -17,3 +17,8 @@
 <!-- bcrypt libray: for hash the password  -->
 
 <!-- install jsonwebtoken : for  standardized way to securely send data between two parties  .token is encoded in json format -->
+
+<!-- roting item -->
+         <!-- create Schema for Items  -->
+         <!-- route: get items with pagination  -->
+        <!-- route:create item with verify user -->
