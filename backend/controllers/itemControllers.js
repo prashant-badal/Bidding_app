@@ -38,11 +38,13 @@ const getItems=AsyncHandler(async(req,res)=>{
 const getItemById = AsyncHandler(async (req, res) => {
     const { id } = req.params;
   
+    const validId= mongoose.Types.ObjectId.isValid(id);
+    console.log(validId)
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        res.status(400);
-        throw new Error("Invalid item ID format");
-    }
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //     res.status(400);
+    //     throw new Error("Invalid item ID format");
+    // }
 
     const item = await Item.findById(id);
     console.log("okii")
@@ -93,6 +95,9 @@ const createItem=AsyncHandler(async(req,res)=>{
 
         res.status(201).json({message:"Save item SuceessFully"
         })
+
+
+        // 
 
         
 
