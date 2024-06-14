@@ -2,7 +2,12 @@ const mongoose = require('mongoose');
 
 // Define the item schema
 const itemSchema = new mongoose.Schema({
-    // Primary Key - mongoose will automatically create an _id field of type ObjectId
+    
+    // owner: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     required: true,
+    // },
     name: {
         type: String,
         required: [true, 'Please add the item name'],

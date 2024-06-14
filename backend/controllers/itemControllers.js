@@ -1,7 +1,7 @@
 const AsyncHandler = require("express-async-handler");
 const Item=require('../models/itemModel')
 
-// desc- GET create item 
+// desc- GET get items 
 // route- GET /api/items
 // access public
 
@@ -38,8 +38,8 @@ const getItems=AsyncHandler(async(req,res)=>{
 const getItemById = AsyncHandler(async (req, res) => {
     const { id } = req.params;
   
-    const validId= mongoose.Types.ObjectId.isValid(id);
-    console.log(validId)
+    // const validId= mongoose.Types.ObjectId.isValid(id);
+    // console.log(validId)
 
     // if (!mongoose.Types.ObjectId.isValid(id)) {
     //     res.status(400);
@@ -58,7 +58,7 @@ const getItemById = AsyncHandler(async (req, res) => {
 
 // desc- POST create item 
 // route- POST /api/items
-// access - private
+// access - private nd ownership
 
 const createItem=AsyncHandler(async(req,res)=>{
         const {name,description,starting_price, current_price,image_url, end_time}=req.body
@@ -95,15 +95,45 @@ const createItem=AsyncHandler(async(req,res)=>{
 
         res.status(201).json({message:"Save item SuceessFully"
         })
-
-
-        // 
-
-        
-
-        
-
     
     })
 
-module.exports={getItems,getItemById,createItem}
+
+    const updatedAuctionItem=(AsyncHandler(async(req,res)=>{
+        console.log(req.user)
+        const updateData = req.body;
+        updateData.updatedAt = Date.now();
+        console.log("working")
+        const updatedItem = await Item.findOne(
+            { _id: req.params.id },
+          updateData ,
+            { new: true }
+        );
+       
+    
+        if (!updatedItem) {
+            res.status(404).json({ message: 'Item not found' });
+        }
+    
+        res.status(200).json({ message: 'Item updated successfully', item: updatedItem });
+    }))
+
+
+    // desc- delete item
+    // route -api/items/:id
+    // access - private and ownership 
+    // const deleteItem =AsyncHandler(async(req,res)=>{
+    //     const { id } = req.params;
+
+    //     const item = await Item.findById(id);
+    
+    //     if (!item) {
+    //          res.status(404).json({ message: 'Item not found' });
+    //     }
+    
+    //     await item.remove();
+    //     res.status(200).json({ message: 'Item successfully deleted' });
+    
+    // })
+
+module.exports={getItems, updatedAuctionItem,getItemById,createItem,}

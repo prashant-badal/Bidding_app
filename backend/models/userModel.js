@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
     // Password field
     password: {
         type: String,
-        required: [true, "Please add the password"],
+        required:  [true, "Please add the password"],
     },
 
     // Email field
@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
 
     // Role field with default value
     role: {
-        type: String,
+        type: String ,
         default: 'user',
         enum: ['user', 'admin'], // Restricts values to 'user' or 'admin'
     },

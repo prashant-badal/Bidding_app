@@ -4,7 +4,7 @@ const {getUserProfile,registerUser,loginUser}=require('../controllers/userContro
 const validateTokenHandler = require("../middleware/validateTokenHandler");
 
 const router=express.Router();
-
+console.log("okay1!");
 
 router.route("/register").post(registerUser)
 

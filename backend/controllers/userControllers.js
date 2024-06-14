@@ -10,13 +10,15 @@ const jwt=require('jsonwebtoken')
 // route - POST /api/user/register
 // access - public
 const registerUser = asyncHandler(async (req, res) => {
+    console.log("okay10");
     const { username, password, role, email } = req.body;
-
+   
     // Validate input fields
     if (!username || !password || !role || !email) {
         res.status(400);
         throw new Error("All fields are mandatory");
     }
+    
 
     // Check if the user with the provided email already exists
     const existingUser = await User.findOne({ email });
@@ -24,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Email already exists");
     }
-    console.log("okay1");
+    
 
     const hashPassword= await bcrypt.hash(password, 10);
     console.log(hashPassword)
@@ -51,7 +53,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 
-// desc- POST login user
+// desc-POST login user
 // route - POST /api/user/login
 // access - public
 
@@ -70,7 +72,7 @@ const loginUser= (asyncHandler(async(req,res)=>{
         console.log("ok match")
 
         const accessToken = jwt.sign({
-            user: {
+            user : {
                 username: user.username,
                 email: user.email,
                 id: user.id
@@ -94,6 +96,7 @@ const getUserProfile=asyncHandler(async(req,res)=>{
     res.status(200);
     res.json({message:"Welcome to Profile"})
 })
+
 
 
 

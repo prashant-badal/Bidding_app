@@ -10,6 +10,7 @@ connectDB();
 const PORT= 8000 || procces.env.PORT
 
 app.use(express.json())
+
 app.use('/api/user',require('./routes/userRoutes') )
 app.use('/api/items',require('./routes/itemRoutes'))
 app.get('/api/',(req,res)=>{

@@ -15,6 +15,7 @@ const validateTokenHandler = asyncHandler(async (req, res, next) => {
      
         res.status(401).json({ error: 'User is not authorized' });
       }
+      console.log("requser",req.user);
       req.user = decoded.user;
       console.log(req.user); // Log the decoded user for debugging
       next(); // Call next() here to move to the next middleware
